@@ -1,11 +1,14 @@
+
+
 drop procedure if Exists PROC_ACCOUNT_RECONCILIATION;
 DELIMITER $$
-CREATE PROCEDURE `PROC_ACCOUNT_RECONCILIATION`(
+CREATE  PROCEDURE `PROC_ACCOUNT_RECONCILIATION`(
 												 P_ENTRY_DATE TEXT,
 												 P_ACCOUNT_ID INT,
 												 P_COMPANY_ID INT,
 												 P_FORM Text
 												)
+
 BEGIN
 
 Declare Date_From Text;
@@ -41,19 +44,19 @@ where
 															A.id,
 															CASE
 															
-																	WHEN (A.GL_FLAG = 57) THEN ROUND(A.AMOUNT,2)
-																	WHEN (A.GL_FLAG = 59) THEN Round(A.AMOUNT,2)
-																	WHEN (A.GL_FLAG = 64) THEN Round(A.AMOUNT,2)
+																	WHEN (A.GL_FLAG = 57) THEN A.AMOUNT
+																	WHEN (A.GL_FLAG = 59) THEN A.AMOUNT
+																	WHEN (A.GL_FLAG = 64) THEN A.AMOUNT
 															
 															END AS DEBIT,
 														
 															CASE
 															
-																	WHEN (A.GL_FLAG = 58)  THEN Round(A.AMOUNT,2) 
-																	WHEN (A.GL_FLAG = 60)  THEN Round(A.AMOUNT,2) 
-																	WHEN (A.GL_FLAG = 62)  THEN Round(A.AMOUNT,2)
-																	when (A.GL_FLAG = 150) Then Round(A.AMOUNT,2)
-																	When (A.GL_FLAG = 151) Then Round(A.AMOUNT,2)
+																	WHEN (A.GL_FLAG = 58)  THEN A.AMOUNT 
+																	WHEN (A.GL_FLAG = 60)  THEN A.AMOUNT 
+																	WHEN (A.GL_FLAG = 62)  THEN A.AMOUNT 
+																	when (A.GL_FLAG = 150) Then A.Amount
+																	When (A.GL_FLAG = 151) Then A.Amount
 															
 															END AS CREDIT,
                                                             Form_Date,
@@ -105,6 +108,10 @@ where
                                                                 Convert(A.Reconcile_Date,date) > Convert(Date_To,Date)
                                                                 And
                                                                 A.Is_Conflicted = 'Y'
+																AND 
+																A.Company_Id = P_COMPANY_ID
+                                                                AND 
+                                                                A.GL_ACC_ID = P_ACCOUNT_ID
                                                                 
                                                             
                                                             )
@@ -115,17 +122,17 @@ where
 															A.id,
 															CASE
 															
-																	WHEN (A.GL_FLAG = 74) THEN Round(A.AMOUNT,2) 
-																	WHEN (A.GL_FLAG = 75) THEN Round(A.AMOUNT,2)
+																	WHEN (A.GL_FLAG = 74) THEN A.AMOUNT 
+																	WHEN (A.GL_FLAG = 75) THEN A.AMOUNT
 															
 															END AS DEBIT,
 														
 															CASE
 															
-																	WHEN (A.GL_FLAG = 73) THEN Round(A.AMOUNT,2)
-																	WHEN (A.GL_FLAG = 76) THEN Round(A.AMOUNT,2) 
-																	WHEN (A.GL_FLAG = 77) THEN Round(A.AMOUNT,2) 
-																	WHEN (A.GL_FLAG = 78) THEN Round(A.AMOUNT,2) 
+																	WHEN (A.GL_FLAG = 73) THEN A.AMOUNT
+																	WHEN (A.GL_FLAG = 76) THEN A.AMOUNT 
+																	WHEN (A.GL_FLAG = 77) THEN A.AMOUNT 
+																	WHEN (A.GL_FLAG = 78) THEN A.AMOUNT 
 															
 															END AS CREDIT,
                                                             Form_Date,
@@ -177,7 +184,10 @@ where
                                                                 Convert(A.Reconcile_Date,date) > Convert(Date_To,Date)
                                                                 And
                                                                 A.Is_Conflicted = 'Y'
-                                                                
+																AND
+                                                                A.Company_Id = P_COMPANY_ID
+                                                                AND 
+                                                                A.GL_ACC_ID = P_ACCOUNT_ID
                                                             
                                                             )
 													
@@ -187,50 +197,50 @@ where
 															A.id,
 															CASE
 															
-																 WHEN (A.GL_FLAG = 510) then Round(A.AMOUNT,2)			
-																 When (A.GL_FLAG = 16)  then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 513) then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 19)  then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 26)  then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 201) then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 203) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 103) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 105) then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 107) then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 204) then Round(A.AMOUNT,2)			
-																 When (A.GL_FLAG = 205) then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 110) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 113) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 112) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 5551) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 89)  then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 116) then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 117) then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 5553) then Round(A.AMOUNT,2)
+																 WHEN (A.GL_FLAG = 510) then A.Amount			
+																 When (A.GL_FLAG = 16)  then A.Amount
+																 When (A.GL_FLAG = 513) then A.Amount
+																 When (A.GL_FLAG = 19)  then A.Amount 
+																 When (A.GL_FLAG = 26)  then A.Amount 
+																 When (A.GL_FLAG = 201) then A.Amount
+																 When (A.GL_FLAG = 203) then A.Amount 
+																 When (A.GL_FLAG = 103) then A.Amount 
+																 When (A.GL_FLAG = 105) then A.Amount
+																 When (A.GL_FLAG = 107) then A.Amount
+																 When (A.GL_FLAG = 204) then A.Amount			
+																 When (A.GL_FLAG = 205) then A.Amount
+																 When (A.GL_FLAG = 110) then A.Amount 
+																 When (A.GL_FLAG = 113) then A.Amount 
+																 When (A.GL_FLAG = 112) then A.Amount 
+																 When (A.GL_FLAG = 5551) then A.Amount 
+																 When (A.GL_FLAG = 89)  then A.Amount
+																 When (A.GL_FLAG = 116) then A.Amount
+																 When (A.GL_FLAG = 117) then A.Amount
+																 When (A.GL_FLAG = 5553) then A.Amount
 															
 															END AS DEBIT,
 														
 															CASE
 															
-																 When (A.GL_FLAG = 511) then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 15)  then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 512) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 20)  then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 101) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 23)  then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 102) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 104) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 106) then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 29)  then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 28)  then Round(A.AMOUNT,2)  
-																 When (A.GL_FLAG = 108) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 109) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 111) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 114) then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 5552) then Round(A.AMOUNT,2) 																 
-																 When (A.GL_FLAG = 115) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 90)  then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 5554) then Round(A.AMOUNT,2) 
+																 When (A.GL_FLAG = 511) then A.Amount
+																 When (A.GL_FLAG = 15)  then A.Amount
+																 When (A.GL_FLAG = 512) then A.Amount 
+																 When (A.GL_FLAG = 20)  then A.Amount
+																 When (A.GL_FLAG = 101) then A.Amount 
+																 When (A.GL_FLAG = 23)  then A.Amount
+																 When (A.GL_FLAG = 102) then A.Amount 
+																 When (A.GL_FLAG = 104) then A.Amount 
+																 When (A.GL_FLAG = 106) then A.Amount
+																 When (A.GL_FLAG = 29)  then A.Amount 
+																 When (A.GL_FLAG = 28)  then A.Amount  
+																 When (A.GL_FLAG = 108) then A.Amount 
+																 When (A.GL_FLAG = 109) then A.Amount 
+																 When (A.GL_FLAG = 111) then A.Amount 
+																 When (A.GL_FLAG = 114) then A.Amount
+																 When (A.GL_FLAG = 5552) then A.Amount 																 
+																 When (A.GL_FLAG = 115) then A.Amount 
+																 When (A.GL_FLAG = 90)  then A.Amount
+																 When (A.GL_FLAG = 5554) then A.Amount 
 															
 															END AS CREDIT,
                                                             Form_Date,
@@ -285,6 +295,10 @@ where
                                                                 Convert(A.Reconcile_Date,date) > Convert(Date_To,Date)
                                                                 And
                                                                 A.Is_Conflicted = 'Y'
+																AND 
+																A.Company_Id = P_COMPANY_ID
+                                                                AND 
+                                                                A.GL_ACC_ID = P_ACCOUNT_ID
                                                                
                                                             )
                                                     
@@ -294,37 +308,37 @@ where
 															A.id,
 															CASE
 															
-																When (A.GL_FLAG = 41) then Round(A.AMOUNT,2)
-																When (A.GL_FLAG = 43) then Round(A.AMOUNT,2)
-																When (A.GL_FLAG = 45) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 48) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 82) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 83) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 84) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 49) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 52) then Round(A.AMOUNT,2)
-																When (A.GL_FLAG = 100) then Round(A.AMOUNT,2) 																
-																When (A.GL_FLAG = 53) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 55) then Round(A.AMOUNT,2) 
+																When (A.GL_FLAG = 41) then A.Amount
+																When (A.GL_FLAG = 43) then A.Amount 
+																When (A.GL_FLAG = 45) then A.Amount 
+																When (A.GL_FLAG = 48) then A.Amount 
+																When (A.GL_FLAG = 82) then A.Amount 
+																When (A.GL_FLAG = 83) then A.Amount 
+																When (A.GL_FLAG = 84) then A.Amount 
+																When (A.GL_FLAG = 49) then A.Amount 
+																When (A.GL_FLAG = 52) then A.Amount
+																When (A.GL_FLAG = 100) then A.Amount 																
+																When (A.GL_FLAG = 53) then A.Amount 
+																When (A.GL_FLAG = 55) then A.Amount 
 															
 															END AS DEBIT,
 														
 															CASE
 															
-															  When (A.GL_FLAG = 42) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 44) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 79) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 80) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 81) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 46) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 47) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 50) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 51) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 54) then Round(A.AMOUNT,2) 
-															  when (A.GL_FLAG = 56) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 86) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 87) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 85) then Round(A.AMOUNT,2)
+															  When (A.GL_FLAG = 42) then A.Amount 
+															  When (A.GL_FLAG = 44) then A.Amount 
+															  When (A.GL_FLAG = 79) then A.Amount 
+															  When (A.GL_FLAG = 80) then A.Amount 
+															  When (A.GL_FLAG = 81) then A.Amount 
+															  When (A.GL_FLAG = 46) then A.Amount 
+															  When (A.GL_FLAG = 47) then A.Amount 
+															  When (A.GL_FLAG = 50) then A.Amount 
+															  When (A.GL_FLAG = 51) then A.Amount 
+															  When (A.GL_FLAG = 54) then A.Amount 
+															  when (A.GL_FLAG = 56) then A.Amount 
+															  When (A.GL_FLAG = 86) then A.Amount 
+															  When (A.GL_FLAG = 87) then A.Amount 
+															  When (A.GL_FLAG = 85) then A.Amount
 															
 															END AS CREDIT,
                                                             Form_Date,
@@ -377,6 +391,10 @@ where
                                                                 Convert(A.Reconcile_Date,date) > Convert(Date_To,Date)
                                                                 And
                                                                 A.Is_Conflicted = 'Y'
+																AND 
+																A.Company_Id = P_COMPANY_ID
+                                                                AND 
+                                                                A.GL_ACC_ID = P_ACCOUNT_ID
                                                                 
                                                             )
                                                     
@@ -386,19 +404,19 @@ where
 															A.id,
 															CASE
 															
-																When (A.GL_FLAG = 32) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 33) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 37) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 39) then Round(A.AMOUNT,2)
+																When (A.GL_FLAG = 32) then A.Amount 
+																When (A.GL_FLAG = 33) then A.Amount 
+																When (A.GL_FLAG = 37) then A.Amount 
+																When (A.GL_FLAG = 39) then A.Amount
 															
 															END AS DEBIT,
 														
 															CASE
 															
-																When (A.GL_FLAG = 31) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 34) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 38) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 40) then Round(A.AMOUNT,2)
+																When (A.GL_FLAG = 31) then A.Amount 
+																When (A.GL_FLAG = 34) then A.Amount 
+																When (A.GL_FLAG = 38) then A.Amount 
+																When (A.GL_FLAG = 40) then A.Amount
 															
 															END AS CREDIT,
                                                             Form_Date,
@@ -451,6 +469,10 @@ where
                                                                 Convert(A.Reconcile_Date,date) > Convert(Date_To,Date)
                                                                 And
                                                                 A.Is_Conflicted = 'Y'
+																AND 
+																A.Company_Id = P_COMPANY_ID
+                                                                AND 
+                                                                A.GL_ACC_ID = P_ACCOUNT_ID
                                                                
                                                             )
                                                             
@@ -460,19 +482,19 @@ where
 															A.id,
 															CASE
 															
-																 When (A.GL_FLAG = 66) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 67) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 69) then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 71) then Round(A.AMOUNT,2)
+																 When (A.GL_FLAG = 66) then A.Amount 
+																 When (A.GL_FLAG = 67) then A.Amount 
+																 When (A.GL_FLAG = 69) then A.Amount
+																 When (A.GL_FLAG = 71) then A.Amount
 															
 															END AS DEBIT,
 														
 															CASE
 															
-																When (A.GL_FLAG = 65) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 68) then Round(A.AMOUNT,2)
-																When (A.GL_FLAG = 70) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 72) then Round(A.AMOUNT,2)
+																When (A.GL_FLAG = 65) then A.Amount 
+																When (A.GL_FLAG = 68) then A.Amount 
+																When (A.GL_FLAG = 70) then A.Amount 
+																When (A.GL_FLAG = 72) then A.Amount
 															
 															END AS CREDIT,
                                                             Form_Date,
@@ -525,6 +547,10 @@ where
                                                                 Convert(A.Reconcile_Date,date) > Convert(Date_To,Date)
                                                                 And
                                                                 A.Is_Conflicted = 'Y'
+																AND 
+																A.Company_Id = P_COMPANY_ID
+                                                                AND 
+                                                                A.GL_ACC_ID = P_ACCOUNT_ID
                                                                 
                                                             ) Order by IS_CONFLICTED DESC;
 															
@@ -537,19 +563,19 @@ where
 															A.id,
 															CASE
 															
-																	WHEN (A.GL_FLAG = 57) THEN Round(A.AMOUNT,2)
-																	WHEN (A.GL_FLAG = 59) THEN Round(A.AMOUNT,2)
-																	WHEN (A.GL_FLAG = 64) THEN Round(A.AMOUNT,2)
+																	WHEN (A.GL_FLAG = 57) THEN A.AMOUNT
+																	WHEN (A.GL_FLAG = 59) THEN A.AMOUNT
+																	WHEN (A.GL_FLAG = 64) THEN A.AMOUNT
 															
 															END AS DEBIT,
 														
 															CASE
 															
-																	WHEN (A.GL_FLAG = 58)  THEN Round(A.AMOUNT,2) 
-																	WHEN (A.GL_FLAG = 60)  THEN Round(A.AMOUNT,2) 
-																	WHEN (A.GL_FLAG = 62)  THEN Round(A.AMOUNT,2) 
-																	when (A.GL_FLAG = 150) Then Round(A.AMOUNT,2)
-																	When (A.GL_FLAG = 151) Then Round(A.AMOUNT,2)
+																	WHEN (A.GL_FLAG = 58)  THEN A.AMOUNT 
+																	WHEN (A.GL_FLAG = 60)  THEN A.AMOUNT 
+																	WHEN (A.GL_FLAG = 62)  THEN A.AMOUNT 
+																	when (A.GL_FLAG = 150) Then A.Amount
+																	When (A.GL_FLAG = 151) Then A.Amount
 															
 															END AS CREDIT,
                                                             Form_Date,
@@ -583,17 +609,17 @@ where
 															A.id,
 															CASE
 															
-																	WHEN (A.GL_FLAG = 74) THEN Round(A.AMOUNT,2) 
-																	WHEN (A.GL_FLAG = 75) THEN Round(A.AMOUNT,2)
+																	WHEN (A.GL_FLAG = 74) THEN A.AMOUNT 
+																	WHEN (A.GL_FLAG = 75) THEN A.AMOUNT
 															
 															END AS DEBIT,
 														
 															CASE
 															
-																	WHEN (A.GL_FLAG = 73) THEN Round(A.AMOUNT,2)
-																	WHEN (A.GL_FLAG = 76) THEN Round(A.AMOUNT,2)
-																	WHEN (A.GL_FLAG = 77) THEN Round(A.AMOUNT,2) 
-																	WHEN (A.GL_FLAG = 78) THEN Round(A.AMOUNT,2) 
+																	WHEN (A.GL_FLAG = 73) THEN A.AMOUNT
+																	WHEN (A.GL_FLAG = 76) THEN A.AMOUNT 
+																	WHEN (A.GL_FLAG = 77) THEN A.AMOUNT 
+																	WHEN (A.GL_FLAG = 78) THEN A.AMOUNT 
 															
 															END AS CREDIT,
                                                             Form_Date,
@@ -626,50 +652,50 @@ where
 															A.id,
 															CASE
 															
-																 WHEN (A.GL_FLAG = 510) then Round(A.AMOUNT,2)			
-																 When (A.GL_FLAG = 16)  then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 513) then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 19)  then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 26)  then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 201) then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 203) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 103) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 105) then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 107) then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 204) then Round(A.AMOUNT,2)			
-																 When (A.GL_FLAG = 205) then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 110) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 113) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 112) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 5551) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 89)  then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 116) then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 117) then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 5553) then Round(A.AMOUNT,2)
+																 WHEN (A.GL_FLAG = 510) then A.Amount			
+																 When (A.GL_FLAG = 16)  then A.Amount
+																 When (A.GL_FLAG = 513) then A.Amount
+																 When (A.GL_FLAG = 19)  then A.Amount 
+																 When (A.GL_FLAG = 26)  then A.Amount 
+																 When (A.GL_FLAG = 201) then A.Amount
+																 When (A.GL_FLAG = 203) then A.Amount 
+																 When (A.GL_FLAG = 103) then A.Amount 
+																 When (A.GL_FLAG = 105) then A.Amount
+																 When (A.GL_FLAG = 107) then A.Amount
+																 When (A.GL_FLAG = 204) then A.Amount			
+																 When (A.GL_FLAG = 205) then A.Amount
+																 When (A.GL_FLAG = 110) then A.Amount 
+																 When (A.GL_FLAG = 113) then A.Amount 
+																 When (A.GL_FLAG = 112) then A.Amount 
+																 When (A.GL_FLAG = 5551) then A.Amount 
+																 When (A.GL_FLAG = 89)  then A.Amount
+																 When (A.GL_FLAG = 116) then A.Amount
+																 When (A.GL_FLAG = 117) then A.Amount
+																 When (A.GL_FLAG = 5553) then A.Amount
 															
 															END AS DEBIT,
 														
 															CASE
 															
-																 When (A.GL_FLAG = 511) then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 15)  then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 512) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 20)  then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 101) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 23)  then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 102) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 104) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 106) then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 29)  then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 28)  then Round(A.AMOUNT,2)  
-																 When (A.GL_FLAG = 108) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 109) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 111) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 114) then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 5552) then Round(A.AMOUNT,2) 																 
-																 When (A.GL_FLAG = 115) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 90)  then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 5554) then Round(A.AMOUNT,2) 
+																 When (A.GL_FLAG = 511) then A.Amount
+																 When (A.GL_FLAG = 15)  then A.Amount
+																 When (A.GL_FLAG = 512) then A.Amount 
+																 When (A.GL_FLAG = 20)  then A.Amount
+																 When (A.GL_FLAG = 101) then A.Amount 
+																 When (A.GL_FLAG = 23)  then A.Amount
+																 When (A.GL_FLAG = 102) then A.Amount 
+																 When (A.GL_FLAG = 104) then A.Amount 
+																 When (A.GL_FLAG = 106) then A.Amount
+																 When (A.GL_FLAG = 29)  then A.Amount 
+																 When (A.GL_FLAG = 28)  then A.Amount  
+																 When (A.GL_FLAG = 108) then A.Amount 
+																 When (A.GL_FLAG = 109) then A.Amount 
+																 When (A.GL_FLAG = 111) then A.Amount 
+																 When (A.GL_FLAG = 114) then A.Amount
+																 When (A.GL_FLAG = 5552) then A.Amount 																 
+																 When (A.GL_FLAG = 115) then A.Amount 
+																 When (A.GL_FLAG = 90)  then A.Amount
+																 When (A.GL_FLAG = 5554) then A.Amount 
 															
 															END AS CREDIT,
                                                             Form_Date,
@@ -706,37 +732,37 @@ where
 															A.id,
 															CASE
 															
-																When (A.GL_FLAG = 41) then Round(A.AMOUNT,2)
-																When (A.GL_FLAG = 43) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 45) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 48) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 82) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 83) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 84) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 49) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 52) then Round(A.AMOUNT,2)
-																When (A.GL_FLAG = 100) then Round(A.AMOUNT,2) 																
-																When (A.GL_FLAG = 53) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 55) then Round(A.AMOUNT,2) 
+																When (A.GL_FLAG = 41) then A.Amount
+																When (A.GL_FLAG = 43) then A.Amount 
+																When (A.GL_FLAG = 45) then A.Amount 
+																When (A.GL_FLAG = 48) then A.Amount 
+																When (A.GL_FLAG = 82) then A.Amount 
+																When (A.GL_FLAG = 83) then A.Amount 
+																When (A.GL_FLAG = 84) then A.Amount 
+																When (A.GL_FLAG = 49) then A.Amount 
+																When (A.GL_FLAG = 52) then A.Amount
+																When (A.GL_FLAG = 100) then A.Amount 																
+																When (A.GL_FLAG = 53) then A.Amount 
+																When (A.GL_FLAG = 55) then A.Amount 
 															
 															END AS DEBIT,
 														
 															CASE
 															
-															  When (A.GL_FLAG = 42) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 44) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 79) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 80) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 81) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 46) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 47) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 50) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 51) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 54) then Round(A.AMOUNT,2) 
-															  when (A.GL_FLAG = 56) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 86) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 87) then Round(A.AMOUNT,2) 
-															  When (A.GL_FLAG = 85) then Round(A.AMOUNT,2)
+															  When (A.GL_FLAG = 42) then A.Amount 
+															  When (A.GL_FLAG = 44) then A.Amount 
+															  When (A.GL_FLAG = 79) then A.Amount 
+															  When (A.GL_FLAG = 80) then A.Amount 
+															  When (A.GL_FLAG = 81) then A.Amount 
+															  When (A.GL_FLAG = 46) then A.Amount 
+															  When (A.GL_FLAG = 47) then A.Amount 
+															  When (A.GL_FLAG = 50) then A.Amount 
+															  When (A.GL_FLAG = 51) then A.Amount 
+															  When (A.GL_FLAG = 54) then A.Amount 
+															  when (A.GL_FLAG = 56) then A.Amount 
+															  When (A.GL_FLAG = 86) then A.Amount 
+															  When (A.GL_FLAG = 87) then A.Amount 
+															  When (A.GL_FLAG = 85) then A.Amount
 															
 															END AS CREDIT,
                                                             Form_Date,
@@ -771,19 +797,19 @@ where
 															A.id,
 															CASE
 															
-																When (A.GL_FLAG = 32) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 33) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 37) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 39) then Round(A.AMOUNT,2)
+																When (A.GL_FLAG = 32) then A.Amount 
+																When (A.GL_FLAG = 33) then A.Amount 
+																When (A.GL_FLAG = 37) then A.Amount 
+																When (A.GL_FLAG = 39) then A.Amount
 															
 															END AS DEBIT,
 														
 															CASE
 															
-																When (A.GL_FLAG = 31) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 34) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 38) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 40) then Round(A.AMOUNT,2)
+																When (A.GL_FLAG = 31) then A.Amount 
+																When (A.GL_FLAG = 34) then A.Amount 
+																When (A.GL_FLAG = 38) then A.Amount 
+																When (A.GL_FLAG = 40) then A.Amount
 															
 															END AS CREDIT,
                                                             Form_Date,
@@ -818,19 +844,19 @@ where
 															A.id,
 															CASE
 															
-																 When (A.GL_FLAG = 66) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 67) then Round(A.AMOUNT,2) 
-																 When (A.GL_FLAG = 69) then Round(A.AMOUNT,2)
-																 When (A.GL_FLAG = 71) then Round(A.AMOUNT,2)
+																 When (A.GL_FLAG = 66) then A.Amount 
+																 When (A.GL_FLAG = 67) then A.Amount 
+																 When (A.GL_FLAG = 69) then A.Amount
+																 When (A.GL_FLAG = 71) then A.Amount
 															
 															END AS DEBIT,
 														
 															CASE
 															
-																When (A.GL_FLAG = 65) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 68) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 70) then Round(A.AMOUNT,2) 
-																When (A.GL_FLAG = 72) then Round(A.AMOUNT,2)
+																When (A.GL_FLAG = 65) then A.Amount 
+																When (A.GL_FLAG = 68) then A.Amount 
+																When (A.GL_FLAG = 70) then A.Amount 
+																When (A.GL_FLAG = 72) then A.Amount
 															
 															END AS CREDIT,
                                                             Form_Date,
@@ -875,8 +901,7 @@ where
 										
 										End if;
 										
-										
-															
+																	
 
 END $$
 DELIMITER ;
