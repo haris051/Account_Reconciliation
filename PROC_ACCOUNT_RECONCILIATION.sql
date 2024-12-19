@@ -1,4 +1,4 @@
-
+Alter Table account_reconciliation Add PREVIOUS_RECONCILED_DIFFERENCE Decimal(22,2) Default 0;
 
 drop procedure if Exists PROC_ACCOUNT_RECONCILIATION;
 DELIMITER $$
@@ -14,6 +14,7 @@ BEGIN
 Declare Date_From Text;
 Declare Date_To Text;
 Declare Account_Type int;
+Declare Prev_Reconcile_Diff Decimal(22,2) Default 0;
 DECLARE _rollback BOOL DEFAULT 0;
 DECLARE EXIT HANDLER FOR SQLEXCEPTION
 BEGIN
@@ -39,7 +40,21 @@ where
 
 											if P_FORM = 'CREATE'
 											then
-													
+											 
+											 
+											 
+											        SELECT 
+															PREVIOUS_RECONCILED_DIFFERENCE 
+													into    Prev_Reconcile_Diff
+													FROM 
+															Account_Reconciliation 
+													WHERE 
+															ACCOUNT_ID= P_ACCOUNT_ID AND ENTRY_DATE < P_ENTRY_DATE 
+															order by ENTRY_DATE Desc Limit 1;   
+  											
+											
+											
+											
                                                     select 
 															A.id,
 															CASE
@@ -558,7 +573,15 @@ where
 										
 										IF P_FORM = 'LOAD'
 										then 
-										
+													SELECT 
+															PREVIOUS_RECONCILED_DIFFERENCE 
+													into    Prev_Reconcile_Diff
+													FROM 
+															Account_Reconciliation 
+													WHERE 
+															ACCOUNT_ID= P_ACCOUNT_ID AND ENTRY_DATE < P_ENTRY_DATE 
+															order by ENTRY_DATE Desc Limit 1; 
+												select * , Prev_Reconcile_Diff from(		
 												select 
 															A.id,
 															CASE
@@ -881,7 +904,8 @@ where
                                                                 A.Company_Id = P_COMPANY_ID
                                                                 AND 
                                                                 A.GL_ACC_ID = P_ACCOUNT_ID
-                                                            );
+                                                            )
+															)A;
 													    
 										
 										
@@ -901,7 +925,20 @@ where
 										
 										End if;
 										
-																	
-
+										if P_FORM = 'PREVIOUS_RECONCILED_DIFFERENCE'
+										then 
+										
+    										SELECT 
+													PREVIOUS_RECONCILED_DIFFERENCE 
+											FROM 
+													Account_Reconciliation 
+											WHERE 
+													ACCOUNT_ID= P_ACCOUNT_ID 
+											AND 
+													ENTRY_DATE < P_ENTRY_DATE 
+											order by ENTRY_DATE Desc Limit 1;
+										
+										End if;
+										
 END $$
 DELIMITER ;
